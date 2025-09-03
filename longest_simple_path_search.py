@@ -12,10 +12,9 @@ def find_longest_path(graph):
             max_length = length
             longest_path = path[:]
 
-        # すべての隣接ノードを探索する
+        # すべての隣接ノードを探索
         for neighbor, distance in graph.get(current_node, []):
             if neighbor not in path:
-                # 隣接ノードに対して再帰的にdfsを呼び出す
                 dfs(neighbor, path + [neighbor], length + distance)
 
     # 各ノードを潜在的な始点として繰り返し処理する
@@ -31,6 +30,10 @@ def main():
     # 標準入力からデータを読み込む
     for line in sys.stdin:
         line = line.strip()
+
+        if line == "find":
+            break
+        
         if not line:
             continue
         
@@ -39,8 +42,17 @@ def main():
             start_node = int(start_node)
             end_node = int(end_node)
             distance = float(distance)
+
+            if start_node <= 0 or end_node <= 0:
+                print("ノードIDは正の値で入力してください。")
+                continue
+
+            if distance <= 0:
+                print("距離は正の値で入力してください。")
+                continue
+
         except ValueError:
-            # 期待される形式に一致しない行はスキップする
+            print("入力形式が正しくありません")
             continue
 
         # グラフにエッジを追加する。グラフは無向である。
@@ -52,9 +64,8 @@ def main():
         graph[start_node].append((end_node, distance))
         graph[end_node].append((start_node, distance))
         
-    # グラフが空の場合を処理する
     if not graph:
-        print()
+        print("グラフが空です。")
         return
 
     # 最長経路を見つける
